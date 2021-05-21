@@ -2,7 +2,7 @@ const menu = [
   {
     id: 1,
     title: "buttermilk pancakes",
-    category: "breakfast",
+    category: "test",
     price: 15.99,
     img: "./images/item-1.jpeg",
     desc: `I'm baby woke mlkshk wolf bitters live-edge blue bottle, hammock freegan copper mug whatever cold-pressed `,
@@ -74,20 +74,48 @@ const menu = [
 ];
 
 const sectionCenter = document.querySelector('.section-center');
-const filterBtns = document.querySelectorAll('.filter-btn');
+
+const container = document.querySelector('.btn-container');
 
 
 //when the page loads, I want to load items
 window.addEventListener('DOMContentLoaded', function(){
   displayMenuItems(menu);
-})
+  //get a unique list of categories of our menu
+  const categories = menu.reduce(function(values, item){
+    if (!values.includes(item.category)){
+      values.push(item.category);
+    }
+    return values;
+  },['all']);
+  const categoryBtns = categories.map(function(category){
+    return `<button class="filter-btn" type="button" data-id=${category}>${category}</button>`
+  }).join("");
+  
+  container.innerHTML = categoryBtns;
+  const filterBtns = document.querySelectorAll('.filter-btn');
 
-//filter items
+  //filter items
 filterBtns.forEach(function(btn){
-btn.addEventListener('click', function(e){
-console.log(e.currentTarget.dataset)
-})
-})
+  btn.addEventListener('click', function(e){
+  const category = e.currentTarget.dataset.id;
+  const menuCategory = menu.filter(function(menuItem){
+    if(category == menuItem.category){
+      return menuItem;
+    }
+    
+  });
+  if (category === 'all'){
+    displayMenuItems(menu);
+  }
+  else {
+    displayMenuItems(menuCategory);
+  }
+  });
+  });
+
+  
+});
 
 
 function displayMenuItems(menuItems){
